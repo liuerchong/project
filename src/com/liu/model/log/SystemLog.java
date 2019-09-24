@@ -1,4 +1,4 @@
-package com.liu.model;
+package com.liu.model.log;
 
 import java.util.Date;
 import java.util.UUID;

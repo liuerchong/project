@@ -1,7 +1,7 @@
 package com.liu.service.log;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.liu.model.SystemLog;
+import com.liu.model.log.SystemLog;
 
 /**@Comments ：
  * @Author ：刘二冲

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import com.liu.common.annotation.Log;
 import com.liu.common.annotation.User;
 import com.liu.common.utils.JsonUtil;
-import com.liu.model.SystemLog;
+import com.liu.model.log.SystemLog;
 import com.liu.service.log.SystemLogService;
 
 /**@Comments ：
