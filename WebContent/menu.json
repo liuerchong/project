@@ -1,0 +1,29 @@
+{
+   "menus" : [{"icon" : "icon-sys","menuid" : "1","menuname" : "采购流程管理","url" : "",
+   	"menus" : 
+   				[
+                 {"icon" : "icon-log","menuid" : "1_1",
+                 "menuname" : "流程定义部署","url" : "/purchasingflow/flow/deployProcess.action"
+                 
+                 },
+                 {"icon" : "icon-log","menuid" : "1_1",
+                 "menuname" : "流程定义查询",
+                 "url" : "/purchasingflow/flow/queryProcessDefinition.action"
+                 },{"icon" : "icon-log","menuid" : "1_1",
+                 "menuname" : "创建采购单",
+                 "url" : "purchasingflow/flow/orderCreat.action"
+                 },{"icon" : "icon-log","menuid" : "1_1",
+                 "menuname" : "提交采购单",
+                 "url" : "/purchasingflow/flow/orderCreat.action"
+                 },{"icon" : "icon-log","menuid" : "1_1",
+                 "menuname" : "部门经理审核",
+                 "url" : "/purchasingflow/flow/orderCreat.action"
+                 },{"icon" : "icon-log","menuid" : "1_1",
+                 "menuname" : "总经理审核",
+                 "url" : "/purchasingflow/flow/orderCreat.action"
+                 }
+                 
+                 ] 
+               }
+             ]
+}
