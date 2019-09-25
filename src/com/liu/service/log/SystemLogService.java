@@ -1,6 +1,7 @@
 package com.liu.service.log;
 
-import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.stereotype.Service;
+
 import com.liu.model.log.SystemLog;
 
 /**@Comments ：
@@ -11,12 +12,10 @@ import com.liu.model.log.SystemLog;
  * @Project ：liuRCProject 
  * @Company ：Vstsoft
  */
-@Service
-public class SystemLogService {
 
-	public void insert(SystemLog log) {
-		
-	}
+public interface SystemLogService {
+
+	public void insert(SystemLog log) ;
 
 }
 

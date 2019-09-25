@@ -16,7 +16,7 @@ import com.liu.service.order.OrderService;
  * @Project ：liuRCProject 
  * @Company ：Vstsoft
  */
-//@Service("orderService")
+@Service("orderService")
 public class OrderServiceImpl implements OrderService{
 
 	@Autowired

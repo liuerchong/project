@@ -81,10 +81,16 @@
 	    <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
 	  </tx:attributes>
 	</tx:advice>
-
+	
+ 	<mvc:annotation-driven  />
+	
+    <aop:aspectj-autoproxy />
 	<!-- 切面 -->
 	<aop:config proxy-target-class="true">
 	  <aop:advisor advice-ref="txAdvice"
 	  pointcut="execution(* com.liu.*.service.impl.*.*(..))"/>
 	</aop:config>
+	<!--切面-->
+     <bean id="systemLogAspect" class="com.liu.common.aspact.SystemLogAspect"></bean>
+     <bean id="liuProjectLogAspect" class="com.liu.common.aspact.LiuProjectLogAspect"></bean>
 </beans>

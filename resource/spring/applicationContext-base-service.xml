@@ -14,7 +14,11 @@
 		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd ">
 
 <!-- 订单管理 -->
-<bean id="orderService" class="com.liu.service.order.impl.OrderServiceImpl"/> 
+<!-- <bean id="orderService" class="com.liu.service.order.impl.OrderServiceImpl"/>  -->
+
+
+
+<context:component-scan base-package="com.liu.service"/>
 
 
 	

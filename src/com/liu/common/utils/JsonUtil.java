@@ -1,4 +1,8 @@
 package com.liu.common.utils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 /**@Comments ：
  * @Author ：刘二冲
  * @Group : K组
@@ -14,6 +18,10 @@ public class JsonUtil {
 		
 		return object.toString();
 	}
+	
+	public static String toJSONString(Object object) {
+        return JSON.toJSONString(object, SerializerFeature.DisableCircularReferenceDetect);
+    }
 	
 	
 
