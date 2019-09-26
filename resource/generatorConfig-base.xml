@@ -27,7 +27,7 @@
 		</javaTypeResolver>
 
 		<!-- targetProject:生成PO类的位置 -->
-		<javaModelGenerator targetPackage="com.liu.model.po.business"
+		<javaModelGenerator targetPackage="com.liu.model.po.log"
 			targetProject=".\src">
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
@@ -35,13 +35,13 @@
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
         <!-- targetPackage:mapper映射文件生成的位置 -->
-		<sqlMapGenerator targetPackage="com.liu.dao.mapper.business" 
+		<sqlMapGenerator targetPackage="com.liu.dao.mapper.log" 
 			targetProject=".\src">
 			<property name="enableSubPackages" value="false" />
 		</sqlMapGenerator>
 		<!-- targetPackage：mapper接口的生成位置 -->
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.liu.dao.mapper.business" 
+			targetPackage="com.liu.dao.mapper.log" 
 			targetProject=".\src">
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
@@ -62,11 +62,11 @@
 		<table schema="" tableName="GE_DICTTYPE"/>   -->
 		<!-- <table schema="" tableName="pur_bus_order"/>  
 		<table schema="" tableName="pur_bus_order_audit"/>   -->
-		<!-- <table schema="" tableName="dept"/>  -->
-		<table schema="" tableName="pur_bus_order" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+		<!-- <table schema="" tableName="dept"/>pur_bus_order_audit  -->
+		<!-- <table schema="" tableName="pur_bus_order" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" /> 
-		
-		<table schema="" tableName="pur_bus_order_audit" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+		 -->
+		<table schema="" tableName="ge_log" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false" /> 
 		
 

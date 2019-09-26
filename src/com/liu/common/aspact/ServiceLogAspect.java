@@ -2,6 +2,7 @@ package com.liu.common.aspact;
 
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,14 +13,20 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.liu.common.annotation.ServiceLog;
 import com.liu.common.annotation.SystemControllerLog;
 import com.liu.common.annotation.SystemServiceLog;
 import com.liu.common.enums.AnnotationTypeEnum;
+import com.liu.common.enums.BackupTypeEnum;
+import com.liu.common.utils.GenerateId;
 import com.liu.common.utils.JsonUtil;
+import com.liu.common.utils.ParameterBaseUtils;
 import com.liu.common.utils.ThreadUtil;
+import com.liu.dao.mapper.log.GeLogMapper;
 import com.liu.model.log.SystemLogStrategy;
+import com.liu.model.po.log.GeLog;
 
 /**@Comments ：
  * @Author ：刘二冲
@@ -30,55 +37,143 @@ import com.liu.model.log.SystemLogStrategy;
  * @Company ：Vstsoft
  */
 @Aspect
-@Component
-public class LiuProjectLogAspect {
+//@Component
+public class ServiceLogAspect {
 
+	@Autowired
+	private GeLogMapper geLogMapper;
 	
-	public LiuProjectLogAspect(){
-		System.out.println(">>>>>>>>>>>>>>>>>>>>LiuProjectLogAspect实例化");
+	public ServiceLogAspect(){
+		System.out.println(">>>>>>>>>>>>>>>>>>>>ServiceLogAspect实例化");
 	}
 	//private static final Logger LOG = LoggerFactory.getLogger(SystemLogAspect.class);
 
-    private static final Logger LOG = LoggerFactory.getLogger(SystemLogAspect.class);
-
-    @Pointcut("(execution(* com.liu.service..*(..))||execution(* com.liu.controller..*(..)) )&& !execution(* com.liu..*.log..*(..))")
-    public void pointcut() {
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceLogAspect.class);
+    //execution(* com.liu.controller..*(..))
+    @Pointcut("execution(* com.liu.service..*(..))&& !execution(* com.liu..*.log..*(..))")
+    public void servicePointcut() {
+    	System.out.println("服务层切点");
 
     }
+   /* @Pointcut("execution(* com.liu.controller..*(..))")
+    public void controllerPointcut() {
+    	System.out.println("控制层切点");
+    }*/
     
     /** 
 	 * 前置通知 用于拦截Controller层记录用户的操作 
 	 * 
 	 * @param joinPoint 切点 
 	 */ 
-	@Before("pointcut()")
-	public void doBefore(JoinPoint joinPoint) { //传入连接点对象
-	    System.out.println("==========执行controller前置通知===============");
-	    if(LOG.isInfoEnabled()){
-	    	LOG.info("before " + joinPoint);
-	    }
-	}    
+	@Before("servicePointcut()")
+	/*public void doBefore(JoinPoint joinPoint) { //传入连接点对象
+		//joinPoint.getTarget().getClass().toString();
+	   // System.out.println("==========执行service前置通知==============="+
+	    	//	joinPoint.getTarget().getClass().toString());
+	   // if(LOG.isInfoEnabled()){
+	   // 	LOG.info("before " + joinPoint);
+	  //  }
+	}  */  
 
 	//配置controller环绕通知,使用在方法aspect()上注册的切入点
-	  @Around("pointcut()")
+	  @Around("servicePointcut()")
 	  public void around(JoinPoint joinPoint){
-	      System.out.println("==========开始执行controller环绕通知===============");
+	      //System.out.println("==========开始执行service环绕通知==============="+joinPoint.getTarget().getClass().toString());
 	      long start = System.currentTimeMillis();
+	      /*try {  
+		        
+		       
+		        
+		        SystemLog log = new SystemLog();  
+		        log.setId(UUID.randomUUID().toString());
+		        log.setDescription(operationName);  
+		        log.setMethod((joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()")+"."+operationType);  
+		        log.setLogType((long)0);  
+		        log.setRequestIp(ip);  
+		        log.setExceptioncode( null);  
+		        log.setExceptionDetail( null);  
+		        log.setParams( null);  
+		        log.setCreateBy(user.getName());  
+		        log.setCreateDate(new Date());  
+		        //保存数据库  
+		        systemLogService.insert(log);  
+		        System.out.println("=====controller后置通知结束=====");  
+		    }  catch (Exception e) {  
+		        //记录本地异常日志  
+		        logger.error("==后置通知异常==");  
+		        logger.error("异常信息:{}", e.getMessage());  
+		    }  */
 	      try {
 	          ((ProceedingJoinPoint) joinPoint).proceed();
 	          long end = System.currentTimeMillis();
+	          Long usetime = end-start;
 	          if(LOG.isInfoEnabled()){
 	        	  LOG.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
 	          }
-	          System.out.println("==========结束执行controller环绕通知===============");
+	          String targetName = joinPoint.getTarget().getClass().getName();  
+		        String methodName = joinPoint.getSignature().getName();  
+		        Object[] arguments = joinPoint.getArgs();  
+		        Class targetClass = Class.forName(targetName);  //通过使用反射机制和连接点对象查找目标方法获取自定义注解的信息
+		        Method[] methods = targetClass.getMethods();
+		        //String operationType = "";
+		       // String operationName = "";
+			     String actionDesc = "";
+	           	 String actionGroup = "";
+	           	 String actionType = "";
+	           	 BackupTypeEnum backupType = BackupTypeEnum.BACKUP_DATA;
+	           	 boolean insertDb = false;
+	           	 String params = ""; 
+	           	if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) { 
+		              
+		              // params=Arrays.toString(joinPoint.getArgs());
+	           		for (Object obj : arguments) {
+						params += ParameterBaseUtils.gainConditionFromObjectByField(obj);
+					}
+		             } 
+		         for (Method method : methods) {  
+		             if (method.getName().equals(methodName)) {  
+		                Class[] clazzs = method.getParameterTypes();  
+		                 if (clazzs.length == arguments.length) {  
+		                	 
+		                	 ServiceLog annotation = method.getAnnotation(ServiceLog.class);
+		                	 if (null!=annotation) {
+								
+		                		 actionDesc = annotation.actionDesc();
+		                		 actionGroup = annotation.actionGroup();
+		                		 actionType = annotation.actionType();
+		                		 backupType = annotation.backupType();
+		                		 insertDb = annotation.insertDb();
+		                		 break;  
+							}
+		                }  
+		            }  
+		        }
+		         if (insertDb) {
+					GeLog geLog = new GeLog();
+					geLog.setLogId(GenerateId.generate());
+					geLog.setOptDesc(actionDesc);
+					geLog.setOptMethod(targetName+"."+methodName);
+					geLog.setOptParems(params);
+					geLog.setBfBz("0");
+					geLog.setOptTime(usetime);
+					geLogMapper.insertSelective(geLog);
+					
+				}
+		        //*========控制台输出=========*//  
+		        System.out.println("=====controller后置通知开始=====");  
+		        //*========数据库日志=========*//
+	         // System.out.println("==========结束执行servcie环绕通知===============");
 	      } catch (Throwable e) {
+	    	  System.err.println(e.getMessage());
 	          long end = System.currentTimeMillis();
 	          if(LOG.isInfoEnabled()){
 	        	  LOG.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
 	          }
+	          LOG.error("==后置通知异常==");  
+		      LOG.error("异常信息:{}", e.getMessage()); 
 	      }
 	  }
-    @Around("pointcut()")
+    //@Around("pointcut()")
     public Object doInvoke(ProceedingJoinPoint pjp) {
         long start = System.currentTimeMillis();
 

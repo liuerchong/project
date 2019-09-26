@@ -23,7 +23,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 </typeAliases>
 	<!-- 和spring整合后 environments配置将废除-->
 	
-	
+		<plugins>
+			<plugin interceptor="com.liu.common.interceptor.MybatisInterceptor"></plugin>
+		</plugins>
 	<!-- 配置mapper.xml文件 -->
 	<mappers>
 	    <!-- 加载单个mapper.xml文件 -->
@@ -40,5 +42,5 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         -->
        <!--  <package name="cn.itcast.ssm.dao.mapper"/> -->
 	</mappers>
-
+	
 </configuration>

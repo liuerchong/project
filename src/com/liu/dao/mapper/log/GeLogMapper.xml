@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liu.dao.mapper.log.GeLogMapper" >
+  <resultMap id="BaseResultMap" type="com.liu.model.po.log.GeLog" >
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+    <result column="LOGIN_DATE" property="loginDate" jdbcType="TIMESTAMP" />
+    <result column="EXIT_DATE" property="exitDate" jdbcType="TIMESTAMP" />
+    <result column="OPT_STATUS" property="optStatus" jdbcType="VARCHAR" />
+    <result column="OPT_METHOD" property="optMethod" jdbcType="VARCHAR" />
+    <result column="OPT_ERROR" property="optError" jdbcType="VARCHAR" />
+    <result column="OPT_PAREMS" property="optParems" jdbcType="VARCHAR" />
+    <result column="OPT_DESC" property="optDesc" jdbcType="VARCHAR" />
+    <result column="REQ_IP" property="reqIp" jdbcType="VARCHAR" />
+    <result column="EXCEPTION_CODE" property="exceptionCode" jdbcType="VARCHAR" />
+    <result column="OPT_TYPE" property="optType" jdbcType="VARCHAR" />
+    <result column="OPT_SQL" property="optSql" jdbcType="VARCHAR" />
+    <result column="BF_BZ" property="bfBz" jdbcType="VARCHAR" />
+    <result column="OPT_TIME" property="optTime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    LOG_ID, USER_ID, USER_NAME, ACCOUNT, LOGIN_DATE, EXIT_DATE, OPT_STATUS, OPT_METHOD, 
+    OPT_ERROR, OPT_PAREMS, OPT_DESC, REQ_IP, EXCEPTION_CODE, OPT_TYPE, OPT_SQL, BF_BZ, 
+    OPT_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ge_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ge_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.liu.model.po.log.GeLog" >
+    insert into ge_log (LOG_ID, USER_ID, USER_NAME, 
+      ACCOUNT, LOGIN_DATE, EXIT_DATE, 
+      OPT_STATUS, OPT_METHOD, OPT_ERROR, 
+      OPT_PAREMS, OPT_DESC, REQ_IP, 
+      EXCEPTION_CODE, OPT_TYPE, OPT_SQL, 
+      BF_BZ, OPT_TIME)
+    values (#{logId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{account,jdbcType=VARCHAR}, #{loginDate,jdbcType=TIMESTAMP}, #{exitDate,jdbcType=TIMESTAMP}, 
+      #{optStatus,jdbcType=VARCHAR}, #{optMethod,jdbcType=VARCHAR}, #{optError,jdbcType=VARCHAR}, 
+      #{optParems,jdbcType=VARCHAR}, #{optDesc,jdbcType=VARCHAR}, #{reqIp,jdbcType=VARCHAR}, 
+      #{exceptionCode,jdbcType=VARCHAR}, #{optType,jdbcType=VARCHAR}, #{optSql,jdbcType=VARCHAR}, 
+      #{bfBz,jdbcType=VARCHAR}, #{optTime,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.liu.model.po.log.GeLog" >
+    insert into ge_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="account != null" >
+        ACCOUNT,
+      </if>
+      <if test="loginDate != null" >
+        LOGIN_DATE,
+      </if>
+      <if test="exitDate != null" >
+        EXIT_DATE,
+      </if>
+      <if test="optStatus != null" >
+        OPT_STATUS,
+      </if>
+      <if test="optMethod != null" >
+        OPT_METHOD,
+      </if>
+      <if test="optError != null" >
+        OPT_ERROR,
+      </if>
+      <if test="optParems != null" >
+        OPT_PAREMS,
+      </if>
+      <if test="optDesc != null" >
+        OPT_DESC,
+      </if>
+      <if test="reqIp != null" >
+        REQ_IP,
+      </if>
+      <if test="exceptionCode != null" >
+        EXCEPTION_CODE,
+      </if>
+      <if test="optType != null" >
+        OPT_TYPE,
+      </if>
+      <if test="optSql != null" >
+        OPT_SQL,
+      </if>
+      <if test="bfBz != null" >
+        BF_BZ,
+      </if>
+      <if test="optTime != null" >
+        OPT_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="loginDate != null" >
+        #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exitDate != null" >
+        #{exitDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optStatus != null" >
+        #{optStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="optMethod != null" >
+        #{optMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="optError != null" >
+        #{optError,jdbcType=VARCHAR},
+      </if>
+      <if test="optParems != null" >
+        #{optParems,jdbcType=VARCHAR},
+      </if>
+      <if test="optDesc != null" >
+        #{optDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="reqIp != null" >
+        #{reqIp,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionCode != null" >
+        #{exceptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="optType != null" >
+        #{optType,jdbcType=VARCHAR},
+      </if>
+      <if test="optSql != null" >
+        #{optSql,jdbcType=VARCHAR},
+      </if>
+      <if test="bfBz != null" >
+        #{bfBz,jdbcType=VARCHAR},
+      </if>
+      <if test="optTime != null" >
+        #{optTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liu.model.po.log.GeLog" >
+    update ge_log
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="loginDate != null" >
+        LOGIN_DATE = #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exitDate != null" >
+        EXIT_DATE = #{exitDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optStatus != null" >
+        OPT_STATUS = #{optStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="optMethod != null" >
+        OPT_METHOD = #{optMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="optError != null" >
+        OPT_ERROR = #{optError,jdbcType=VARCHAR},
+      </if>
+      <if test="optParems != null" >
+        OPT_PAREMS = #{optParems,jdbcType=VARCHAR},
+      </if>
+      <if test="optDesc != null" >
+        OPT_DESC = #{optDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="reqIp != null" >
+        REQ_IP = #{reqIp,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionCode != null" >
+        EXCEPTION_CODE = #{exceptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="optType != null" >
+        OPT_TYPE = #{optType,jdbcType=VARCHAR},
+      </if>
+      <if test="optSql != null" >
+        OPT_SQL = #{optSql,jdbcType=VARCHAR},
+      </if>
+      <if test="bfBz != null" >
+        BF_BZ = #{bfBz,jdbcType=VARCHAR},
+      </if>
+      <if test="optTime != null" >
+        OPT_TIME = #{optTime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liu.model.po.log.GeLog" >
+    update ge_log
+    set USER_ID = #{userId,jdbcType=VARCHAR},
+      USER_NAME = #{userName,jdbcType=VARCHAR},
+      ACCOUNT = #{account,jdbcType=VARCHAR},
+      LOGIN_DATE = #{loginDate,jdbcType=TIMESTAMP},
+      EXIT_DATE = #{exitDate,jdbcType=TIMESTAMP},
+      OPT_STATUS = #{optStatus,jdbcType=VARCHAR},
+      OPT_METHOD = #{optMethod,jdbcType=VARCHAR},
+      OPT_ERROR = #{optError,jdbcType=VARCHAR},
+      OPT_PAREMS = #{optParems,jdbcType=VARCHAR},
+      OPT_DESC = #{optDesc,jdbcType=VARCHAR},
+      REQ_IP = #{reqIp,jdbcType=VARCHAR},
+      EXCEPTION_CODE = #{exceptionCode,jdbcType=VARCHAR},
+      OPT_TYPE = #{optType,jdbcType=VARCHAR},
+      OPT_SQL = #{optSql,jdbcType=VARCHAR},
+      BF_BZ = #{bfBz,jdbcType=VARCHAR},
+      OPT_TIME = #{optTime,jdbcType=INTEGER}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -91,6 +91,6 @@
 	  pointcut="execution(* com.liu.*.service.impl.*.*(..))"/>
 	</aop:config>
 	<!--切面-->
-     <bean id="systemLogAspect" class="com.liu.common.aspact.SystemLogAspect"></bean>
-     <bean id="liuProjectLogAspect" class="com.liu.common.aspact.LiuProjectLogAspect"></bean>
+     <bean id="controllerLogAspect" class="com.liu.common.aspact.ControllerLogAspect"></bean>
+     <bean id="serviceLogAspect" class="com.liu.common.aspact.ServiceLogAspect"></bean>
 </beans>

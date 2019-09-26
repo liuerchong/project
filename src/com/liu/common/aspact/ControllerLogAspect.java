@@ -37,20 +37,20 @@ import com.liu.service.log.SystemLogService;
 //标记为一个切面类（需要在配置文件中开启基于注解的切面支持<aop:aspectj-autoProxy proxy-target-class="true">）
 @Aspect
 @Component  //标记该类交由spring管理，就不用使用xml文件配置该bean了
-public class SystemLogAspect {
+public class ControllerLogAspect {
 	
-	public SystemLogAspect() {
+	public ControllerLogAspect() {
 		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<切面初始化");
 	}
 	//注入Service用于把日志保存数据库  
 	@Resource  //这里我用resource注解，一般用的是@Autowired，他们的区别如有时间我会在后面的博客中来写
 	private SystemLogService systemLogService;  
 	
-	private  static  final Logger logger = LoggerFactory.getLogger(SystemLogAspect. class);   //slf4j 抽象日志变量
+	private  static  final Logger logger = LoggerFactory.getLogger(ControllerLogAspect. class);   //slf4j 抽象日志变量
 	
 	//Controller层切点  
-	//@Pointcut("execution (* com.liu.controller..*(..))")   
-	@Pointcut("@annotation(com.liu.common.annotation.Log)")   
+	@Pointcut("execution(* com.liu.controller..*(..))")   
+	//@Pointcut("@annotation(com.liu.common.annotation.Log)")   
 	//切入点表达式这样写在后边的通知方法中就可以使用该方法不用反复的写该切入点表达式了。
 	public  void controllerAspect() {  
 		System.out.println("《《《《《《《《《《《《《《《《切入点");

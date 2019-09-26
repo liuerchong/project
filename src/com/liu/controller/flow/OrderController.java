@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.liu.common.annotation.ServiceLog;
 import com.liu.common.annotation.SystemControllerLog;
 import com.liu.common.result.ResultInfo;
 import com.liu.common.result.SubmitResultInfo;
@@ -38,7 +39,7 @@ public class OrderController {
 	@RequestMapping("/addOrderSubmit")
 	@ResponseBody
 	//@Log(operationType="add操作:",operationName="添加用户") 
-	@SystemControllerLog(description="保存订单")
+	@ServiceLog(actionType="create",actionDesc="保存訂單",actionGroup="/purchasingflow/flow",insertDb=true)
 	public SubmitResultInfo createOrder(PurBusOrder purBusOrder ){
 		
 	//提示用户信息
