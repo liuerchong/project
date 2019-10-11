@@ -49,9 +49,10 @@ public class ControllerLogAspect {
 	private  static  final Logger logger = LoggerFactory.getLogger(ControllerLogAspect. class);   //slf4j 抽象日志变量
 	
 	//Controller层切点  
-	@Pointcut("execution(* com.liu.controller..*(..))")   
+	//@Pointcut("execution(* com.liu.controller..*(..))")   
 	//@Pointcut("@annotation(com.liu.common.annotation.Log)")   
 	//切入点表达式这样写在后边的通知方法中就可以使用该方法不用反复的写该切入点表达式了。
+	@Pointcut("execution(* com.liu.controller..*(..))&& !execution(* com.liu..*.log..*(..))")
 	public  void controllerAspect() {  
 		System.out.println("《《《《《《《《《《《《《《《《切入点");
 		
@@ -62,31 +63,35 @@ public class ControllerLogAspect {
 	 * 
 	 * @param joinPoint 切点 
 	 */ 
-	@Before("controllerAspect()")
-	public void doBefore(JoinPoint joinPoint) { //传入连接点对象
+	//@Before("controllerAspect()")
+	/*public void doBefore(JoinPoint joinPoint) { //传入连接点对象
 	    System.out.println("==========执行controller前置通知===============");
 	    if(logger.isInfoEnabled()){
 	        logger.info("before " + joinPoint);
 	    }
-	}    
+	}  */  
 	
 	//配置controller环绕通知,使用在方法aspect()上注册的切入点
 	  @Around("controllerAspect()")
-	  public void around(JoinPoint joinPoint){
+	  public Object around(JoinPoint joinPoint){
 	      System.out.println("==========开始执行controller环绕通知===============");
 	      long start = System.currentTimeMillis();
 	      try {
-	          ((ProceedingJoinPoint) joinPoint).proceed();
+	          Object object = ((ProceedingJoinPoint) joinPoint).proceed();
+	          Object[] arguments = joinPoint.getArgs(); 
+	          
 	          long end = System.currentTimeMillis();
 	          if(logger.isInfoEnabled()){
 	              logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
 	          }
 	          System.out.println("==========结束执行controller环绕通知===============");
+	          return object;
 	      } catch (Throwable e) {
 	          long end = System.currentTimeMillis();
 	          if(logger.isInfoEnabled()){
 	              logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
 	          }
+	          return null;
 	      }
 	  }
 	
@@ -95,7 +100,7 @@ public class ControllerLogAspect {
 	 * 
 	 * @param joinPoint 切点 
 	 */  
-	@After("controllerAspect()")  
+	//@After("controllerAspect()")  
 	public  void after(JoinPoint joinPoint) {  
 	
 	   /* HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();  
@@ -157,7 +162,7 @@ public class ControllerLogAspect {
 	} 
 	
 	//配置后置返回通知,使用在方法aspect()上注册的切入点
-	  @AfterReturning("controllerAspect()")
+	 // @AfterReturning("controllerAspect()")
 	  public void afterReturn(JoinPoint joinPoint){
 	      System.out.println("=====执行controller后置返回通知=====");  
 	          if(logger.isInfoEnabled()){
@@ -171,7 +176,7 @@ public class ControllerLogAspect {
 	 * @param joinPoint 
 	 * @param e 
 	 */  
-	 @AfterThrowing(pointcut = "controllerAspect()", throwing="e")  
+	// @AfterThrowing(pointcut = "controllerAspect()", throwing="e")  
 	 public  void doAfterThrowing(JoinPoint joinPoint, Throwable e) {  
 	    /*HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();  
 	    HttpSession session = request.getSession();  

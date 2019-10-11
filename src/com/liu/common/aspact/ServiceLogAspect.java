@@ -1,8 +1,13 @@
 package com.liu.common.aspact;
 
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -39,6 +44,18 @@ import com.liu.model.po.log.GeLog;
 @Aspect
 //@Component
 public class ServiceLogAspect {
+
+	private ConcurrentLinkedQueue logQuene = new ConcurrentLinkedQueue();
+	
+	
+	
+	public ConcurrentLinkedQueue getLogQuene() {
+		return logQuene;
+	}
+
+	public void setLogQuene(ConcurrentLinkedQueue logQuene) {
+		this.logQuene = logQuene;
+	}
 
 	@Autowired
 	private GeLogMapper geLogMapper;
@@ -77,7 +94,7 @@ public class ServiceLogAspect {
 
 	//配置controller环绕通知,使用在方法aspect()上注册的切入点
 	  @Around("servicePointcut()")
-	  public void around(JoinPoint joinPoint){
+	  public Object around(JoinPoint joinPoint){
 	      //System.out.println("==========开始执行service环绕通知==============="+joinPoint.getTarget().getClass().toString());
 	      long start = System.currentTimeMillis();
 	      /*try {  
@@ -104,7 +121,7 @@ public class ServiceLogAspect {
 		        logger.error("异常信息:{}", e.getMessage());  
 		    }  */
 	      try {
-	          ((ProceedingJoinPoint) joinPoint).proceed();
+	         Object object =  ((ProceedingJoinPoint) joinPoint).proceed();
 	          long end = System.currentTimeMillis();
 	          Long usetime = end-start;
 	          if(LOG.isInfoEnabled()){
@@ -149,6 +166,7 @@ public class ServiceLogAspect {
 		            }  
 		        }
 		         if (insertDb) {
+		        	 
 					GeLog geLog = new GeLog();
 					geLog.setLogId(GenerateId.generate());
 					geLog.setOptDesc(actionDesc);
@@ -156,13 +174,17 @@ public class ServiceLogAspect {
 					geLog.setOptParems(params);
 					geLog.setBfBz("0");
 					geLog.setOptTime(usetime);
-					geLogMapper.insertSelective(geLog);
+					logQuene.add(geLog);
+					//geLogMapper.insertSelective(geLog);
+					
+					invokeLog();
 					
 				}
 		        //*========控制台输出=========*//  
 		        System.out.println("=====controller后置通知开始=====");  
 		        //*========数据库日志=========*//
 	         // System.out.println("==========结束执行servcie环绕通知===============");
+		        return object;
 	      } catch (Throwable e) {
 	    	  System.err.println(e.getMessage());
 	          long end = System.currentTimeMillis();
@@ -171,6 +193,7 @@ public class ServiceLogAspect {
 	          }
 	          LOG.error("==后置通知异常==");  
 		      LOG.error("异常信息:{}", e.getMessage()); 
+		      return null;
 	      }
 	  }
     //@Around("pointcut()")
@@ -274,5 +297,23 @@ public class ServiceLogAspect {
         return null;
     }
 	
+    //开启多线程处理日志
+    public void invokeLog(){
+    	
+    	LOG.info("处理日志开始");
+    	ExecutorService executorService = Executors.newFixedThreadPool(10);
+    	executorService.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				GeLog geLog = (GeLog)logQuene.poll();
+				if (null!=geLog) {
+					
+					geLogMapper.insertSelective(geLog);
+				}
+			}
+		});
+    }
 }
 
